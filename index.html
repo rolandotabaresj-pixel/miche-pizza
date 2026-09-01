@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miche Pizza - Pizzería Artesanal (SPWA)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="header-principal">
+        <img src="assets/avatar.png" alt="Avatar Miche" class="avatar-miche">
+        
+        <div class="header-logo-container">
+            <div class="logo-text-group">
+                <span class="bendecidos">Bendecidos Siempre</span>
+                <h1 class="logo">
+                    <span class="logo-miche">MICHE</span>
+                    <span class="logo-pizza">PIZZA</span>
+                </h1>
+            </div>
+        </div>
+        
+        <button class="btn-carrito" id="btn-carrito-global">
+            🛒 Carrito <span id="contador-burbuja">0</span>
+        </button>
+    </header>
+
+    <main id="spwa-main" class="spwa-container">
+
+        <div id="spwa-progress-header" class="progress-header is-hidden">
+            <button id="btn-volver" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver</button>
+            <div class="progress-bar-container">
+                <div id="spwa-progress-bar-fill" class="progress-bar-fill"></div>
+            </div>
+        </div>
+
+        <section id="step-1" class="step-panel activo seccion-titulo">
+            <h1>1. ¿De qué tamaño la armamos hoy?</h1>
+            <p>Selecciona las porciones ideales para compartir.</p>
+            <div class="large-card-grid">
+                <div class="large-card" data-step="step-2" data-size="Mediana" data-portions="6" data-price="28000">
+                    <h2>Mediana</h2>
+                    <p>(6 Porciones)</p>
+                    <img src="assets/mediana.png" alt="Pizza Mediana">
+                    <p class="precio-vibrante">Desde $28.000</p>
+                </div>
+                <div class="large-card" data-step="step-2" data-size="Grande" data-portions="8" data-price="38000">
+                    <h2>Grande</h2>
+                    <p>(8 Porciones)</p>
+                    <img src="assets/grande.png" alt="Pizza Grande">
+                    <p class="precio-vibrante">Desde $38.000</p>
+                </div>
+                <div class="large-card" data-step="step-2" data-size="Familiar" data-portions="12" data-price="46000">
+                    <h2>Familiar</h2>
+                    <p>(12 Porciones)</p>
+                    <img src="assets/familiar.png" alt="Pizza Familiar">
+                    <p class="precio-vibrante">Desde $46.000</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="step-2" class="step-panel binary-step-grid seccion-titulo">
+            <h2>2. ¿Cómo prefieres tu pizza?</h2>
+            <div class="binary-card-grid">
+                <div class="binary-card" data-step="step-catalog" data-style="De un Sabor">
+                    <i class="fas fa-pizza-slice"></i>
+                    <h3>De un Sabor</h3>
+                    <p>Una pizza entera de tu sabor favorito.</p>
+                </div>
+                <div class="binary-card" data-step="step-catalog" data-style="Mitad y Mitad / Combinada">
+                    <span class="favorita-badge">¡La favorita para compartir!</span>
+                    <i class="fas fa-divide"></i>
+                    <h3>Mitad y Mitad</h3>
+                    <p>Combina dos sabores en una sola pizza.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="step-catalog" class="step-panel catalog-step-container">
+            <div id="catalog-step-header" class="catalog-step-header">
+                <h2 id="flavor-progress-title">...</h2>
+                <div id="flavor-chosen-banner" class="flavor-chosen-banner">...</div>
+            </div>
+            <div id="catalog-flavor-grid" class="catalog-flavor-grid">
+            </div>
+        </section>
+
+        <section id="step-final" class="step-panel Final large-card Final seccion-titulo">
+            <h2>3. ¿Deseas llevar tu borde al siguiente nivel?</h2>
+            <div id="step-final-large-card" class="large-card Final is-hidden">
+                <img id="final-card-img" src="" alt="Resumen de Pizza">
+                <p id="final-card-portions" class="is-hidden"></p>
+                <div class="grupo-adiciones">
+                    <label class="opcion-adicion">
+                        <span>🧀 Borde Relleno de Queso</span>
+                        <div>
+                            <span id="price-borde-queso-spwa" class="precio-adicion-dinamico"></span>
+                            <input type="radio" name="borde-final-spwa" value="Borde Relleno de Queso">
+                        </div>
+                    </label>
+                    <label class="opcion-adicion">
+                        <span>🍠 Borde de Bocadillo</span>
+                        <div>
+                            <span id="price-borde-bocadillo-spwa" class="precio-adicion-dinamico"></span>
+                            <input type="radio" name="borde-final-spwa" value="Borde de Bocadillo">
+                        </div>
+                    </label>
+                    <label class="opcion-adicion">
+                        <span>🍯 Borde de Arequipe</span>
+                        <div>
+                            <span id="price-borde-arequipe-spwa" class="precio-adicion-dinamico"></span>
+                            <input type="radio" name="borde-final-spwa" value="Borde de Arequipe">
+                        </div>
+                    </label>
+                    <label class="opcion-adicion">
+                        <span>❌ Sin Borde Adicional</span>
+                        <div>
+                            <span class="precio-adicion-gratis">+$0</span>
+                            <input type="radio" name="borde-final-spwa" value="Sin Borde Adicional" checked>
+                        </div>
+                    </label>
+                </div>
+                <button id="btn-add-cart-final" class="btn-agregar-carrito-spwa">
+                    ¡Agregar al Carrito y Pedir! 🍕
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <aside id="sidebar-carrito" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Tu Pedido</h2>
+            <button class="btn-cerrar" id="btn-cerrar-carrito">✖</button>
+        </div>
+        <div id="items-carrito" class="items-carrito"></div>
+        <div class="sidebar-footer">
+            <div class="total">
+                <h3>Total:</h3>
+                <h3 id="total-carrito">$ 0</h3>
+            </div>
+            <div class="formulario-envio">
+                <input type="text" id="cliente-nombre" placeholder="Tu Nombre Completo" autocomplete="off">
+                <input type="text" id="cliente-direccion" placeholder="Dirección de Entrega / Barrio" autocomplete="off">
+                <button id="btn-pagar" class="btn-pagar" disabled>Enviar Pedido por WhatsApp</button>
+            </div>
+        </div>
+    </aside>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
