@@ -151,7 +151,8 @@ const spwa = {
         this.elements.panelCatalogoGrid.innerHTML = productsData.map(prod => {
             return `
                 <article class="tarjeta-producto">
-                    <img src="${prod.img}" alt="${prod.nombre}" loading="lazy">
+                <div class="tarjeta-producto-imagen-contenedor">    
+                    <img src="${prod.img}" alt="${prod.nombre}" loading="lazy"></div>               
                     <h3>${prod.nombre}</h3>
                     <p class="ingredientes"><strong>Ingredientes:</strong> ${prod.ingredientes}</p>
                     <button id="btn-flavor-${prod.id}">Elegir sabor</button>

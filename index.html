@@ -4,23 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Miche Pizza - Pizzería Artesanal (SPWA)</title>
+    <link rel="preload" href="font/bookmanoldstyle_bolditalic.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="font/komikax.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="font/FREESCPT.TTF" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <header class="header-principal">
-        <img src="assets/avatar.png" alt="Avatar Miche" class="avatar-miche">
+    <header class="header-principal">        
         
         <div class="header-logo-container">
-            <div class="logo-text-group">
-                <span class="bendecidos">Bendecidos Siempre</span>
-                <h1 class="logo">
-                    <span class="logo-miche">MICHE</span>
-                    <span class="logo-pizza">PIZZA</span>
-                </h1>
-            </div>
         </div>
         
         <button class="btn-carrito" id="btn-carrito-global">
@@ -28,51 +23,83 @@
         </button>
     </header>
 
-    <main id="spwa-main" class="spwa-container">
+    <main id="spwa-main" class="spwa-container" style="padding-top: 0; max-width: 100%;">
 
-        <div id="spwa-progress-header" class="progress-header is-hidden">
+        <div id="spwa-progress-header" class="progress-header is-hidden" style="padding: 1rem 5%;">
             <button id="btn-volver" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver</button>
             <div class="progress-bar-container">
                 <div id="spwa-progress-bar-fill" class="progress-bar-fill"></div>
             </div>
         </div>
 
-        <section id="step-1" class="step-panel activo seccion-titulo">
-            <h1>1. ¿De qué tamaño la armamos hoy?</h1>
-            <p>Selecciona las porciones ideales para compartir.</p>
-            <div class="large-card-grid">
-                <div class="large-card" data-step="step-2" data-size="Mediana" data-portions="6" data-price="28000">
-                    <h2>Mediana</h2>
-                    <p>(6 Porciones)</p>
-                    <img src="assets/mediana.png" alt="Pizza Mediana">
-                    <p class="precio-vibrante">Desde $28.000</p>
-                </div>
-                <div class="large-card" data-step="step-2" data-size="Grande" data-portions="8" data-price="38000">
-                    <h2>Grande</h2>
-                    <p>(8 Porciones)</p>
-                    <img src="assets/grande.png" alt="Pizza Grande">
-                    <p class="precio-vibrante">Desde $38.000</p>
-                </div>
-                <div class="large-card" data-step="step-2" data-size="Familiar" data-portions="12" data-price="46000">
-                    <h2>Familiar</h2>
-                    <p>(12 Porciones)</p>
-                    <img src="assets/familiar.png" alt="Pizza Familiar">
-                    <p class="precio-vibrante">Desde $46.000</p>
+        <!-- PASO 1: CONTENEDOR GENERAL QUE AGRUPA EL HERO Y LAS TARJETAS -->
+        <section id="step-1" class="step-panel activo" style="gap: 0;">
+
+           
+            <div class="hero-seccion-principal">
+                <div class="hero-overlay-degradado"></div>
+
+                <!-- AVATAR AQUÍ: Directamente hijo de la sección principal -->
+                <img src="assets/avatar.png" alt="Avatar Miche" class="avatar-miche">
+
+                <!-- CONTENEDOR DE TEXTO: Ya sin el avatar adentro -->
+                <div class="hero-contenido-texto">
+                    <div class="logo-text-group-hero">
+                        <h1 class="logo">
+                            <span class="logo-miche">MICHE</span>
+                            <span class="logo-pizza">PIZZA</span>
+                        </h1>
+                        <span class="bendecidos">Bendecidos Siempre</span>
+                    </div>
                 </div>
             </div>
+            <!-- BLOQUE 2: Las tarjetas de selección como una sección independiente abajo -->
+            <div class="tarjetas-seccion-inferior">
+                <div class="seccion-titulo" style="margin-bottom: 2rem;">
+                    <h1>1. ¿De qué tamaño la armamos hoy?</h1>
+                    <p>Selecciona las porciones ideales para compartir.</p>
+                </div>
+                <div class="large-card-grid">
+                    <div class="large-card" data-step="step-2" data-size="Mediana" data-portions="6" data-price="28000">
+                        <h2>Mediana</h2>
+                        <p>(6 Porciones)</p>
+                        <div class="tarjeta-producto-imagen-contenedor">
+                            <img src="assets/mediana.png" alt="Pizza Mediana">
+                        </div>
+                        <p class="precio-vibrante">Desde $28.000</p>
+                    </div>
+                    <div class="large-card" data-step="step-2" data-size="Grande" data-portions="8" data-price="38000">
+                        <h2>Grande</h2>
+                        <p>(8 Porciones)</p>
+                        <div class="tarjeta-producto-imagen-contenedor">
+                            <img src="assets/grande.png" alt="Pizza Grande">
+                        </div>
+                        <p class="precio-vibrante">Desde $38.000</p>
+                    </div>
+                    <div class="large-card" data-step="step-2" data-size="Familiar" data-portions="12" data-price="46000">
+                        <h2>Familiar</h2>
+                        <p>(12 Porciones)</p>
+                        <div class="tarjeta-producto-imagen-contenedor">
+                            <img src="assets/familiar.png" alt="Pizza Familiar">
+                        </div>
+                        <p class="precio-vibrante">Desde $46.000</p>
+                    </div>
+                </div>
+            </div>
+
         </section>
 
         <section id="step-2" class="step-panel binary-step-grid seccion-titulo">
             <h2>2. ¿Cómo prefieres tu pizza?</h2>
             <div class="binary-card-grid">
                 <div class="binary-card" data-step="step-catalog" data-style="De un Sabor">
-                    <i class="fas fa-pizza-slice"></i>
+                    <img src="assets/unica.jpeg" alt="Pizza de un sabor" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 8px; margin: 0.5rem 0;">
                     <h3>De un Sabor</h3>
                     <p>Una pizza entera de tu sabor favorito.</p>
                 </div>
                 <div class="binary-card" data-step="step-catalog" data-style="Mitad y Mitad / Combinada">
                     <span class="favorita-badge">¡La favorita para compartir!</span>
-                    <i class="fas fa-divide"></i>
+                    <img src="assets/mitad-mitad-2.jpeg" alt="Pizza Mitad y Mitad" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 8px; margin: 0.5rem 0;">
                     <h3>Mitad y Mitad</h3>
                     <p>Combina dos sabores en una sola pizza.</p>
                 </div>
