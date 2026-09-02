@@ -3,21 +3,21 @@
    ========================================= */
 @font-face {
     font-family: 'Bookman';
-    src: url('/font/bookmanoldstyle_bolditalic.ttf') format('truetype');
+    src: url('../font/bookmanoldstyle_bolditalic.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Komika';
-    src: url('/font/komikax.ttf') format('truetype');
+    src: url('../font/komikax.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'FreeScript';
-    src: url('/font/FREESCPT.TTF') format('truetype');
+    src: url('../font/FREESCPT.TTF') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -46,7 +46,7 @@ body {
 }
 
 /* =========================================
-   3. ENCABEZADO Y LOGOTIPO (Diseño Móvil)
+   3. ENCABEZADO Y LOGOTIPO
    ========================================= */
 .header-principal {
     background-color: var(--color-fondo-tarjeta); 
@@ -60,34 +60,16 @@ body {
     box-shadow: 0 4px 15px rgba(211, 47, 47, 0.08);
 }
 
-.avatar-miche {
-    position: absolute;
-    top: 5px;
-    left: 2%; 
-    width: 110px; 
-    z-index: 101;
-    display: block; 
-}
-
 .header-logo-container {
     display: flex;
     align-items: center;
 }
 
 .logo-text-group {
-    margin-left: 115px; 
+    margin-left: 0; 
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-
-.bendecidos {
-    font-family: 'FreeScript', cursive;
-    color:green;
-    font-size: 2rem;
-    line-height: 0.8;
-    transform: rotate(-5deg); 
-    margin-bottom: 5px;
 }
 
 .logo { 
@@ -113,6 +95,14 @@ body {
     font-style: normal;
     font-size: 2.6rem;
     margin-left: 8px; 
+}
+
+.bendecidos {
+    font-family: 'FreeScript', cursive;
+    color: #099904;
+    font-size: 2rem;
+    line-height: 0.8;
+    font-weight: 400;
 }
 
 .btn-carrito {
@@ -177,9 +167,32 @@ body {
 .catalog-step-header { display: flex; flex-direction: column; gap: 0.5rem; text-align: center; margin-bottom: 2rem;}
 .flavor-chosen-banner { background-color: #fafafa; padding: 0.8rem; border-radius: 8px; font-size: 0.9rem; color: var(--color-texto-suave); display: none; text-align: center; border: 1px solid #eee;}
 .catalog-flavor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
-.tarjeta-producto { background: var(--color-fondo-tarjeta); border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06); border: 1px solid rgba(0, 0, 0, 0.04); display: flex; flex-direction: column; gap: 1rem; transition: transform 0.3s ease; }
+.tarjeta-producto { background: var(--color-fondo-tarjeta); border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06); border: 1px solid rgba(0, 0, 0, 0.04); display: flex; flex-direction: column; gap: 1rem; transition: transform 0.3s ease; overflow: hidden; }
 .tarjeta-producto:hover { transform: translateY(-4px);}
-.tarjeta-producto img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; }
+
+/* =========================================
+   6.1 ANIMACIÓN RESPIRACIÓN PIZZA
+   ========================================= */
+@keyframes respiracion-pizza {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); } 
+    100% { transform: scale(1); }
+}
+
+.tarjeta-producto-imagen-contenedor {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden; 
+    border-radius: 8px;
+}
+
+.tarjeta-producto-imagen-contenedor img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: respiracion-pizza 6s infinite ease-in-out;
+}
+
 .tarjeta-producto h3 { font-size: 1.2rem; color: var(--color-texto); }
 .tarjeta-producto .ingredientes { font-size: 0.9rem; color: var(--color-texto-suave); flex-grow: 1;}
 .tarjeta-producto button { width: 100%; padding: 0.8rem; background-color: var(--color-primario); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.3s ease;}
@@ -227,22 +240,165 @@ body {
 .is-hidden { display: none !important; }
 
 /* =========================================
-   9. ADAPTACIÓN PARA PC Y PANTALLAS GRANDES
+   9. ESTILOS HERO (BASE Y PC)
    ========================================= */
-@media (min-width: 768px) {
-    .header-principal {
-        padding: 1.2rem 5%;
+.hero-seccion-principal {
+    position: relative; /* Clave absoluta para anclar elementos dentro */
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    background-image: url('../assets/fondo-miche-pizza2.jpeg'); 
+    background-size: cover;
+    background-position: center;
+    padding: 10rem 2rem 10rem 2rem; /* Padding equilibrado para PC */
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.hero-overlay-degradado {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    z-index: 1;
+    pointer-events: none;
+    transition: all 0.4s ease-in-out;
+}
+
+/* 1. REGLA CLAVE: El avatar se oculta completamente por defecto en PC */
+.avatar-miche {
+    display: none; 
+}
+
+/* En PC, los textos van limpios a la izquierda sin ocupar espacio de avatar */
+.hero-contenido-texto {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding-left: 0%;
+}
+
+.hero-contenido-texto .logo-miche { 
+    font-size: clamp(3.2rem, 4.5vw, 5.2rem);
+}
+
+.hero-contenido-texto .logo-pizza { 
+    font-size: clamp(3.2rem, 4.5vw, 5.2rem);
+    margin-left: 2rem;
+}
+
+.hero-contenido-texto .bendecidos { 
+    display: block;
+    font-size: clamp(2.4rem, 3.2vw, 3.8rem); 
+    margin-top: 3rem;
+    margin-left: 0;
+    text-align: left;
+    color: #099904;
+}
+
+
+/* =========================================
+   10. ADAPTACIÓN PARA MÓVIL / TABLET (max-width: 768px)
+   ========================================= */
+@media (max-width: 768px) {
+    .hero-seccion-principal {
+        padding: 5rem 1.5rem 4rem 1.5rem;
     }
 
+    /* 2. REGLA CLAVE: Solo en móvil se activa el avatar y se ancla perfectamente abajo */
     .avatar-miche {
-        display: none; 
+        display: block;
+        position: absolute;
+        bottom: 0;          /* Toca milimétricamente la línea inferior del fondo */
+        left: 2%;           /* Ubicación a la izquierda */
+        width: 130px;       /* Tamaño proporcional para dispositivos móviles */
+        height: auto;
+        z-index: 3;         /* Por encima de la imagen y degradado */
     }
 
-    .logo-text-group {
-        margin-left: 0; 
+    /* Centramos los textos en móvil */
+    .hero-contenido-texto {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding-left: 0;
+        width: 100%;
     }
 
-    .bendecidos { font-size: 2.5rem; }
-    .logo-miche { font-size: 2.8rem; }
-    .logo-pizza { font-size: 3.2rem; margin-left: 12px; }
+    .hero-overlay-degradado {
+        background: rgba(255, 255, 255, 0.65); 
+        backdrop-filter: blur(22px);       
+        -webkit-backdrop-filter: blur(22px); 
+        mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 45%, rgba(0,0,0,0) 80%);
+        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 45%, rgba(0,0,0,0) 80%);
+    }
+
+    .hero-contenido-texto .logo-miche {
+        font-size: 2.2rem;
+        color: #1a1a1a;
+        text-shadow: none;
+    }
+
+    .hero-contenido-texto .logo-pizza {
+        font-size: 2.6rem;
+        color: var(--color-primario);
+        text-shadow: none;
+        margin-left: 5px;
+    }
+
+    .hero-contenido-texto .bendecidos {
+        font-size: 2rem;
+        color: #099904;
+        text-shadow: none;
+        margin-top: 15px;
+        margin-left: -15px;
+        text-align: center;
+    }
+}
+
+/* =========================================
+   11. SECCIÓN DE TARJETAS INFERIOR
+   ========================================= */
+.tarjetas-seccion-inferior {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 5%;
+    width: 100%;
+}
+
+/* =========================================
+   12. MICRO-INTERACCIONES Y ACCESIBILIDAD
+   ========================================= */
+.large-card, .binary-card, .catalog-flavor-grid .tarjeta-producto {
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: transform, box-shadow;
+}
+
+.large-card:hover, .binary-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.large-card:active, .binary-card:active {
+    transform: translateY(-2px) scale(0.99);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+:focus {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid #2e7d32; 
+    outline-offset: 3px;
+    border-radius: 8px;
 }
