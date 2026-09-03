@@ -15,12 +15,11 @@
 
     <header class="header-principal">        
         
-        <div class="header-logo-container">
-        </div>
+        <div class="header-logo-container"></div>               
         
-        <button class="btn-carrito" id="btn-carrito-global">
-            🛒 Carrito <span id="contador-burbuja">0</span>
-        </button>
+            <button class="btn-carrito" id="btn-carrito-global">
+                <i class="fas fa-receipt"></i> Mi orden <i class="fas fa-pizza-slice"></i> al horno <span id="contador-burbuja">0</span>
+            </button>
     </header>
 
     <main id="spwa-main" class="spwa-container" style="padding-top: 0; max-width: 100%;">
@@ -120,38 +119,46 @@
             <div id="step-final-large-card" class="large-card Final is-hidden">
                 <img id="final-card-img" src="" alt="Resumen de Pizza">
                 <p id="final-card-portions" class="is-hidden"></p>
-                <div class="grupo-adiciones">
-                    <label class="opcion-adicion">
-                        <span>🧀 Borde Relleno de Queso</span>
-                        <div>
-                            <span id="price-borde-queso-spwa" class="precio-adicion-dinamico"></span>
-                            <input type="radio" name="borde-final-spwa" value="Borde Relleno de Queso">
-                        </div>
-                    </label>
-                    <label class="opcion-adicion">
-                        <span>🍠 Borde de Bocadillo</span>
-                        <div>
-                            <span id="price-borde-bocadillo-spwa" class="precio-adicion-dinamico"></span>
-                            <input type="radio" name="borde-final-spwa" value="Borde de Bocadillo">
-                        </div>
-                    </label>
-                    <label class="opcion-adicion">
-                        <span>🍯 Borde de Arequipe</span>
-                        <div>
-                            <span id="price-borde-arequipe-spwa" class="precio-adicion-dinamico"></span>
-                            <input type="radio" name="borde-final-spwa" value="Borde de Arequipe">
-                        </div>
-                    </label>
-                    <label class="opcion-adicion">
-                        <span>❌ Sin Borde Adicional</span>
-                        <div>
-                            <span class="precio-adicion-gratis">+$0</span>
-                            <input type="radio" name="borde-final-spwa" value="Sin Borde Adicional" checked>
-                        </div>
-                    </label>
-                </div>
+                 <div class="grupo-adiciones">
+                        <!-- Opción: Borde de Queso -->
+                        <label class="opcion-adicion">
+                            <input type="radio" name="borde-final-spwa" value="Borde Relleno de Queso" class="hidden-radio">
+                            <span class="option-text">Borde Relleno de Queso</span>
+                            <div class="adicion-precio">
+                                <span id="price-borde-queso-spwa" class="precio-adicion-dinamico"></span>
+                            </div>
+                        </label>
+
+                        <!-- Opción: Borde de Bocadillo -->
+                        <label class="opcion-adicion">
+                            <input type="radio" name="borde-final-spwa" value="Borde de Bocadillo" class="hidden-radio">
+                            <span class="option-text">Borde de Bocadillo</span>
+                            <div class="adicion-precio">
+                                <span id="price-borde-bocadillo-spwa" class="precio-adicion-dinamico"></span>
+                            </div>
+                        </label>
+
+                        <!-- Opción: Borde de Arequipe -->
+                        <label class="opcion-adicion">
+                            <input type="radio" name="borde-final-spwa" value="Borde de Arequipe" class="hidden-radio">
+                            <span class="option-text">Borde de Arequipe</span>
+                            <div class="adicion-precio">
+                                <span id="price-borde-arequipe-spwa" class="precio-adicion-dinamico"></span>
+                            </div>
+                        </label>
+
+                        <!-- Opción: Sin Borde -->
+                        <label class="opcion-adicion">
+                            <input type="radio" name="borde-final-spwa" value="Sin Borde Adicional" class="hidden-radio" checked>
+                            <span class="option-text">❌ Sin Borde Adicional</span>
+                            <div class="adicion-precio">
+                                <span class="precio-adicion-gratis">+$0</span>
+                            </div>
+                        </label>
+                    </div>
                 <button id="btn-add-cart-final" class="btn-agregar-carrito-spwa">
-                    ¡Agregar al Carrito y Pedir! 🍕
+                    ¡Agregar a la caja y pedir! 
+                    <img src="assets/caja-de-pizza.png" alt="Caja de Pizza" style="width: 26px; height: auto; margin-left: 5px;">
                 </button>
             </div>
         </section>

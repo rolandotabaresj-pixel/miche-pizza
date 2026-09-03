@@ -178,13 +178,13 @@ const spwa = {
                 });
             } else {
                 flavorButtons.forEach(btn => {
-                    btn.textContent = "Combinar y Continuar 🚀";
+                    btn.textContent = "Combinar y Continuar";
                     btn.classList.remove('Mitad-1-Context');
                 });
             }
         } else {
             flavorButtons.forEach(btn => {
-                btn.textContent = "Elegir sabor y continuar 🚀";
+                btn.textContent = "Elegir sabor y continuar";
                 btn.classList.remove('Mitad-1-Context');
             });
         }
