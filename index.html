@@ -179,6 +179,25 @@
             <div class="formulario-envio">
                 <input type="text" id="cliente-nombre" placeholder="Tu Nombre Completo" autocomplete="off">
                 <input type="text" id="cliente-direccion" placeholder="Dirección de Entrega / Barrio" autocomplete="off">
+                
+                <select id="cliente-metodo-pago" class="select-pago">
+                    <option value="" disabled selected>Selecciona tu método de pago</option>
+                    <option value="Efectivo">Pago en Efectivo</option>
+                    <option value="Transferencia">Transferencia Bancaria</option>
+                </select>
+
+                <!-- Contenedor Efectivo -->
+                <div id="pago-efectivo-container" class="is-hidden">
+                    <input type="number" id="cliente-monto-efectivo" placeholder="¿Con cuánto dinero pagas?">
+                </div>
+
+                <!-- Contenedor Transferencia -->
+                <div id="pago-transferencia-container" class="is-hidden" style="font-size: 0.85rem; color: #666; margin-bottom: 0.8rem; background: #eee; padding: 0.8rem; border-radius: 8px;">
+                    <strong>Bancolombia Ahorros:</strong> 01580913721<br>
+                    <!-- <strong>Nequi:</strong> 3244022566<br> -->
+                    <!--  <em>* Recuerda enviar el comprobante al WhatsApp junto con tu pedido.</em> -->
+                </div>
+
                 <button id="btn-pagar" class="btn-pagar" disabled>Enviar Pedido por WhatsApp</button>
             </div>
         </div>

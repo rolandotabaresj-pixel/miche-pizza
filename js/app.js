@@ -354,7 +354,25 @@ document.getElementById('btn-cerrar-carrito').addEventListener('click', cerrarCa
 
 const inputNombreCliente = document.getElementById('cliente-nombre');
 const inputDireccionCliente = document.getElementById('cliente-direccion');
+const selectMetodoPago = document.getElementById('cliente-metodo-pago');
+const containerEfectivo = document.getElementById('pago-efectivo-container');
+const containerTransferencia = document.getElementById('pago-transferencia-container');
+const inputMontoEfectivo = document.getElementById('cliente-monto-efectivo');
 const btnPagarWhatsApp = document.getElementById('btn-pagar');
+
+// Listeners de los nuevos campos
+selectMetodoPago.addEventListener('change', (e) => {
+    const metodo = e.target.value;
+    if (metodo === 'Efectivo') {
+        containerEfectivo.classList.remove('is-hidden');
+        containerTransferencia.classList.add('is-hidden');
+    } else if (metodo === 'Transferencia') {
+        containerTransferencia.classList.remove('is-hidden');
+        containerEfectivo.classList.add('is-hidden');
+    }
+    spwaValidarFormulario();
+});
+inputMontoEfectivo.addEventListener('input', spwaValidarFormulario);
 
 inputNombreCliente.addEventListener('input', (e) => {
     e.target.value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
@@ -363,7 +381,19 @@ inputNombreCliente.addEventListener('input', (e) => {
 inputDireccionCliente.addEventListener('input', spwaValidarFormulario);
 
 function spwaValidarFormulario() {
-    btnPagarWhatsApp.disabled = !(inputNombreCliente.value.trim().length >= 3 && inputDireccionCliente.value.trim() !== '' && carrito.length > 0);
+    let nombreValido = inputNombreCliente.value.trim().length >= 3;
+    let direccionValida = inputDireccionCliente.value.trim() !== '';
+    let carritoLleno = carrito.length > 0;
+    let pagoValido = false;
+
+    // Validación condicional del pago
+    if (selectMetodoPago.value === 'Transferencia') {
+        pagoValido = true;
+    } else if (selectMetodoPago.value === 'Efectivo') {
+        pagoValido = inputMontoEfectivo.value.trim() !== ''; // Exigir que escriba un monto
+    }
+
+    btnPagarWhatsApp.disabled = !(nombreValido && direccionValida && carritoLleno && pagoValido);
 };
 
 window.enviarWhatsApp = () => {
@@ -379,6 +409,23 @@ window.enviarWhatsApp = () => {
         mensaje += `  Subtotal: ${formatoMonedaColombiaUnified.format(subtotal)}\n`;
     });
 
-    mensaje += `\n*TOTAL A PAGAR: ${formatoMonedaColombiaUnified.format(total)}*`;
+    mensaje += `\n*TOTAL A PAGAR: ${formatoMonedaColombiaUnified.format(total)}*\n`;
+    
+    // Anexar detalles del pago
+    mensaje += `\n*Método de Pago:* ${selectMetodoPago.value}`;
+    if (selectMetodoPago.value === 'Efectivo') {
+        const montoEfectivo = parseFloat(inputMontoEfectivo.value);
+        const cambio = montoEfectivo - total;
+        mensaje += `\n*Paga con:* ${formatoMonedaColombiaUnified.format(montoEfectivo)}`;
+        mensaje += `\n*Cambio a llevar:* ${cambio >= 0 ? formatoMonedaColombiaUnified.format(cambio) : 'Pendiente'}`;
+    } else {
+        mensaje += `\n*(Comprobante adjunto en el chat)*`;
+    }
+
     window.open(`https://wa.me/573244022566?text=${encodeURIComponent(mensaje)}`, '_blank');
 };
+
+// Listeners de los botones del carrito
+document.getElementById('btn-carrito-global').addEventListener('click', abrirCarrito);
+document.getElementById('btn-cerrar-carrito').addEventListener('click', cerrarCarrito);
+btnPagarWhatsApp.addEventListener('click', enviarWhatsApp);
