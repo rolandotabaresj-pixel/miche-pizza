@@ -415,7 +415,7 @@ body {
        ============================================================================== */
     .sidebar-footer {
         /* Mantenemos paddings laterales y superior originales, pero inflamos el inferior */
-        padding: 1.5rem 1.5rem 500px 1.5rem; /* <--- 500px de colchón vacío */
+        padding: 1.5rem 1.5rem 400px 1.5rem; /* <--- 400px de colchón vacío */
         background: #fafafa;
         border-top: 1px solid rgba(0,0,0,0.08);
         position: relative;
