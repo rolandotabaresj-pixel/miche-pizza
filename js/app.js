@@ -1,4 +1,3 @@
-// --- js/app.js ---
 import { productsData, preciosBordesData } from './productos.js';
 
 const spwa = {
@@ -135,7 +134,7 @@ const spwa = {
     updateProgressBar: function(stepId) {
         let progress = 0;
         if (stepId === 'step-2') progress = 20;
-        if (stepId === 'step-catalog') progress = this.currentFlavorContext === 'Mitad 2' ? 66 : 40;
+        if (stepId === 'step-catalog') progress = this.currentFlavorContext === 'Mitad 2' ? 60 : 40;
         if (stepId === 'step-bebidas') progress = 80; // <-- NUEVO PROGRESO
         if (stepId === 'step-final') progress = 100;
         
@@ -513,27 +512,3 @@ window.enviarWhatsApp = () => {
 document.getElementById('btn-carrito-global').addEventListener('click', abrirCarrito);
 document.getElementById('btn-cerrar-carrito').addEventListener('click', cerrarCarrito);
 btnPagarWhatsApp.addEventListener('click', enviarWhatsApp);
-
-// ==============================================================================
-// NUEVO CÓDIGO: CORRECCIÓN PARA EMPUJAR FORMULARIO ARRIBA EN MÓVILES
-// ==============================================================================
-
-// Ejecutar solo si estamos en la vista móvil (coincidiendo con el breakpoint CSS de 768px)
-if (window.innerWidth <= 768) {
-    // Seleccionar todos los inputs y selects dentro del formulario de envío en el sidebar
-    const camposFormulario = document.querySelectorAll('.formulario-envio input, .formulario-envio select');
-
-    camposFormulario.forEach(campo => {
-        // Cuando un campo recibe el foco (el usuario hace tap para escribir)
-        campo.addEventListener('focus', function() {
-            // Usamos setTimeout para dar tiempo a que el teclado virtual empiece a aparecer
-            // y el navegador ajuste internamente el viewport. 300ms suele ser suficiente.
-            setTimeout(() => {
-                // scrollIntoView({ behavior: 'smooth', block: 'center' }) fuerza al navegador
-                // a desplazar el contenedor scrollable (el sidebar) de modo que este elemento
-                // quede visible y centrado en la zona no tapada por el teclado.
-                this.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 300); 
-        });
-    });
-}
