@@ -15,9 +15,9 @@ export const productsData = [
     { id: 14, nombre: "Napolitana", categoria: "Clásica", ingredientes: "Tomate fresco, albahaca y queso", precios: { "Mediana": 28000, "Grande": 38000, "Familiar": 46000 }, img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80" },
     { id: 15, nombre: "Americana", categoria: "Especiales", ingredientes: "Jamón, carne, ranchera y queso", precios: { "Mediana": 28000, "Grande": 38000, "Familiar": 46000 }, img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80" },
     { id: 16, nombre: "Margarita", categoria: "Clásica", ingredientes: "Jamón, tomate fresco, champiñón y queso", precios: { "Mediana": 28000, "Grande": 38000, "Familiar": 46000 }, img: "https://images.unsplash.com/photo-1604382355076-af4b0eb60143?auto=format&fit=crop&w=600&q=80" },
-    { id: 17, nombre: "Paisa", categoria: "Especiales", ingredientes: "Chorizo de ternera, carne, cebolla, pimienta y queso", precios: { "Mediana": 28000, "Grande": 38000, "Familiar": 46000 }, img: "https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=600&q=80" },
+    { id: 17, nombre: "Paisa", categoria: "Especiales", ingredientes: "Chorizo de ternera, carne, cebolla, pimienta y queso", precios: { "Mediana": 28000, "Grande": 38000, "Familiar": 46000 }, img: "assets/paisa.jpeg" },
     { id: 18, nombre: "Mexicana", categoria: "Especiales", ingredientes: "Chorizo de ternera, carne, cebolla, pimienta y queso", precios: { "Mediana": 28000, "Grande": 38000, "Familiar": 46000 }, img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80" },
-    { id: 19, nombre: "Miche Burger", categoria: "Gourmet", ingredientes: "Carne, tocineta, cebolla, tomate fresco y salsa de la casa", precios: { "Mediana": 28000, "Grande": 38000, "Familiar": 46000 }, img: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80" }
+    { id: 19, nombre: "Miche Burger", categoria: "Gourmet", ingredientes: "Carne, tocineta, cebolla, tomate fresco y salsa de la casa", precios: { "Mediana": 28000, "Grande": 38000, "Familiar": 46000 }, img: "assets/miche-burguer.jpeg" }
 ];
 
 export const preciosBordesData = { "Mediana": 8000, "Grande": 10000, "Familiar": 12000 };

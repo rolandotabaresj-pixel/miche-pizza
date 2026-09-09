@@ -113,7 +113,42 @@
             <div id="catalog-flavor-grid" class="catalog-flavor-grid">
             </div>
         </section>
-
+        <!-- NUEVO PASO 4: BEBIDAS -->
+        <section id="step-bebidas" class="step-panel seccion-titulo">
+            <h2>4. ¡Completa tu experiencia!</h2>
+            <p>El mejor acompañante para tu pizza.</p>
+            <div class="large-card-grid">
+                
+                <!-- Tarjeta Pepsi -->
+                <div class="large-card bebida-card" data-step="step-final" data-bebida="Pepsi" data-price="7000">
+                    <div class="tarjeta-producto-imagen-contenedor">
+                        <img src="assets/pepsi.jpeg" alt="Pepsi 1.5L">
+                    </div>
+                </div>
+                
+                <!-- Tarjeta Colombiana -->
+                <div class="large-card bebida-card" data-step="step-final" data-bebida="Colombiana" data-price="7000">
+                    <div class="tarjeta-producto-imagen-contenedor">
+                        <img src="assets/colombiana.jpeg" alt="Colombiana 1.5L">
+                    </div>
+                </div>
+                
+                <!-- Tarjeta Manzana -->
+                <div class="large-card bebida-card" data-step="step-final" data-bebida="Manzana Postobón" data-price="7000">
+                    <div class="tarjeta-producto-imagen-contenedor">
+                        <img src="assets/manzana.jpeg" alt="Manzana 1.5L">
+                    </div>
+                </div>
+                
+                <!-- Tarjeta Ninguna -->
+                <div class="large-card bebida-card" data-step="step-final" data-bebida="Ninguna" data-price="0">
+                    <div class="tarjeta-producto-imagen-contenedor">
+                        <img src="assets/sin-bebida.jpeg" alt="No, gracias. Sin bebida">
+                    </div>
+                </div>
+                
+            </div>
+        </section>
         <section id="step-final" class="step-panel Final large-card Final seccion-titulo">
             <h2>3. ¿Deseas llevar tu borde al siguiente nivel?</h2>
             <div id="step-final-large-card" class="large-card Final is-hidden">
@@ -172,13 +207,59 @@
         </div>
         <div id="items-carrito" class="items-carrito"></div>
         <div class="sidebar-footer">
-            <div class="total">
-                <h3>Total:</h3>
-                <h3 id="total-carrito">$ 0</h3>
+            <div class="total" style="flex-direction: column; gap: 0.5rem; margin-bottom: 1.2rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.95rem; color: #666;">
+                    <span>Subtotal:</span>
+                    <span id="subtotal-carrito">$ 0</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.95rem; color: #666;">
+                    <span>Domicilio:</span>
+                    <span id="domicilio-carrito">$ 0</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 0.5rem;">
+                    <h3>Total:</h3>
+                    <h3 id="total-carrito">$ 0</h3>
+                </div>
             </div>
             <div class="formulario-envio">
-                <input type="text" id="cliente-nombre" placeholder="Tu Nombre Completo" autocomplete="off">
-                <input type="text" id="cliente-direccion" placeholder="Dirección de Entrega / Barrio" autocomplete="off">
+                <input type="text" id="cliente-nombre" placeholder="Tu Nombre Completo (Ej: Ana Lopez)" autocomplete="off">
+                
+                <!-- NUEVO: TIPO DE ENTREGA -->
+                <select id="cliente-tipo-entrega" class="select-pago">
+                    <option value="" disabled selected>¿Cómo deseas recibir tu pedido?</option>
+                    <option value="Recoger">Recoger en tienda</option>
+                    <option value="Domicilio">🛵 Envío a Domicilio</option>
+                </select>
+
+                <!-- CONTENEDOR DE DIRECCIÓN Y BARRIO -->
+                <div id="contenedor-domicilio" class="is-hidden">
+                    <select id="cliente-barrio" class="select-pago">
+                        <option value="" disabled selected>Selecciona tu barrio (Cobertura)</option>
+                        <option value="San Pio" data-precio="3000">San Pio</option>
+                        <option value="Valle sur" data-precio="3000">Valle sur</option>
+                        <option value="Samaria" data-precio="6000">Samaria</option>
+                        <option value="Yarumito" data-precio="6000">Yarumito</option>                    
+                        <option value="Escocia" data-precio="4000">Escocia</option>
+                        <option value="Suramérica" data-precio="7000">Suramérica</option>
+                        <option value="La Estrella" data-precio="8000">La estrella</option>
+                        <option value="Bariloche" data-precio="8000">Bariloche</option>
+                        <option value="San Antonio de Prado" data-precio="10000">San Antonio de Prado</option>
+                        <option value="Limonar" data-precio="10000">Limonar</option>
+                        <option value="Rosaleda" data-precio="10000">Rosaleda</option>
+                        <option value="Itagüí" data-precio="7000">Itagüí</option>
+                        <option value="Los Naranjos" data-precio="7000">Los Naranjos</option>
+                        <option value="Calatrava" data-precio="8000">Calatrava</option>
+                        <option value="Rosario" data-precio="8000">Rosario</option>
+                        <option value="La Independencia Itagüí" data-precio="7000">La Independencia Itagüí</option>                    
+                        <option value="Las Margaritas" data-precio="7000">Las Margaritas</option>
+                        <option value="Las Mercedes Itagüí" data-precio="7000">Las Mercedes Itagüí</option>
+                        <option value="San José" data-precio="7000">San José</option>                    
+                        <option value="Envigado" data-precio="12000">Envigado</option>
+                        <option value="Sabaneta" data-precio="8000">Sabaneta</option>           
+                        <option value="La Finquita" data-precio="7000">La Finquita</option>                    
+                    </select>
+                    <input type="text" id="cliente-direccion" placeholder="Dirección exacta (Ej: Calle 12 #34-56)" autocomplete="off">
+                </div>
                 
                 <select id="cliente-metodo-pago" class="select-pago">
                     <option value="" disabled selected>Selecciona tu método de pago</option>
@@ -186,16 +267,12 @@
                     <option value="Transferencia">Transferencia Bancaria</option>
                 </select>
 
-                <!-- Contenedor Efectivo -->
                 <div id="pago-efectivo-container" class="is-hidden">
                     <input type="number" id="cliente-monto-efectivo" placeholder="¿Con cuánto dinero pagas?">
                 </div>
 
-                <!-- Contenedor Transferencia -->
                 <div id="pago-transferencia-container" class="is-hidden" style="font-size: 0.85rem; color: #666; margin-bottom: 0.8rem; background: #eee; padding: 0.8rem; border-radius: 8px;">
                     <strong>Bancolombia Ahorros:</strong> 01580913721<br>
-                    <!-- <strong>Nequi:</strong> 3244022566<br> -->
-                    <!--  <em>* Recuerda enviar el comprobante al WhatsApp junto con tu pedido.</em> -->
                 </div>
 
                 <button id="btn-pagar" class="btn-pagar" disabled>Enviar Pedido por WhatsApp</button>

@@ -1,7 +1,7 @@
 import { productsData, preciosBordesData } from './productos.js';
 
 const spwa = {
-    history: ['step-1'], // Pila de navegación para el botón Volver
+    history: ['step-1'], 
     currentFlavorContext: '', 
     currentStyleChoice: '', 
     choices: {
@@ -9,6 +9,7 @@ const spwa = {
         style: '',
         flavor1: { id: 0, name: '', img: '' },
         flavor2: { id: 0, name: '', img: '' },
+        bebida: { name: '', price: 0 }, // <-- NUEVO ESTADO PARA LA BEBIDA
         border: { name: 'Sin Borde Adicional', price: 0 }
     },
     
@@ -20,6 +21,7 @@ const spwa = {
             'step-1': document.getElementById('step-1'),
             'step-2': document.getElementById('step-2'),
             'step-catalog': document.getElementById('step-catalog'),
+            'step-bebidas': document.getElementById('step-bebidas'), // <-- REGISTRO DEL NUEVO PANEL
             'step-final': document.getElementById('step-final')
         },
         panelCatalogoTitle: document.getElementById('flavor-progress-title'),
@@ -37,10 +39,8 @@ const spwa = {
     },
 
     bindEvents: function() {
-        // Evento Volver
         this.elements.btnVolver.addEventListener('click', () => this.goBack());
 
-        // Paso 1
         const sizeCards = this.elements.panels['step-1'].querySelectorAll('.large-card');
         sizeCards.forEach(card => {
             card.addEventListener('click', () => {
@@ -53,7 +53,6 @@ const spwa = {
             });
         });
 
-        // Paso 2
         const styleCards = this.elements.panels['step-2'].querySelectorAll('.binary-card');
         styleCards.forEach(card => {
             card.addEventListener('click', () => {
@@ -66,7 +65,18 @@ const spwa = {
             });
         });
 
-        // Paso 4: Finalizar
+        // NUEVO: Escuchar clics en el paso de bebidas
+        const bebidaCards = this.elements.panels['step-bebidas'].querySelectorAll('.large-card');
+        bebidaCards.forEach(card => {
+            card.addEventListener('click', () => {
+                this.choices.bebida = {
+                    name: card.dataset.bebida,
+                    price: parseInt(card.dataset.price)
+                };
+                this.advanceTo('step-final'); // Después de la bebida, va al borde final
+            });
+        });
+
         this.elements.panelFinalBtnAddCart.addEventListener('click', () => {
             this.finalizeOrderAndAddToCart();
         });
@@ -85,14 +95,13 @@ const spwa = {
     },
 
     goBack: function() {
-        if (this.history.length <= 1) return; // Ya estamos en el inicio
+        if (this.history.length <= 1) return;
 
-        const currentStep = this.history.pop(); // Removemos el actual
+        const currentStep = this.history.pop();
         this.elements.panels[currentStep].classList.remove('activo');
         
         const previousStep = this.getCurrentStep();
         
-        // Manejo especial si volvemos dentro del catálogo (de Mitad 2 a Mitad 1)
         if (currentStep === 'step-catalog' && previousStep === 'step-catalog') {
             this.currentFlavorContext = 'Mitad 1';
             this.updateProgressTitle();
@@ -124,8 +133,9 @@ const spwa = {
 
     updateProgressBar: function(stepId) {
         let progress = 0;
-        if (stepId === 'step-2') progress = 33;
-        if (stepId === 'step-catalog') progress = this.currentFlavorContext === 'Mitad 2' ? 66 : 50;
+        if (stepId === 'step-2') progress = 20;
+        if (stepId === 'step-catalog') progress = this.currentFlavorContext === 'Mitad 2' ? 60 : 40;
+        if (stepId === 'step-bebidas') progress = 80; // <-- NUEVO PROGRESO
         if (stepId === 'step-final') progress = 100;
         
         this.elements.progressBarFill.style.width = `${progress}%`;
@@ -196,14 +206,14 @@ const spwa = {
                 this.choices.flavor1 = { id: flavorId, name: flavorName, img: flavorImg };
                 this.currentFlavorContext = 'Mitad 2';
                 this.updateProgressTitle();
-                this.advanceTo('step-catalog'); // Empuja el mismo panel al historial para la Mitad 2
+                this.advanceTo('step-catalog'); 
             } else {
                 this.choices.flavor2 = { id: flavorId, name: flavorName, img: flavorImg };
-                this.advanceTo('step-final'); 
+                this.advanceTo('step-bebidas'); // <-- CAMBIO: Ahora va a bebidas
             }
         } else {
             this.choices.flavor1 = { id: flavorId, name: flavorName, img: flavorImg };
-            this.advanceTo('step-final'); 
+            this.advanceTo('step-bebidas'); // <-- CAMBIO: Ahora va a bebidas
         }
     },
 
@@ -252,6 +262,7 @@ const spwa = {
         
         this.choices.border = borderChoice;
         
+        // 1. Agregar la pizza al carrito
         let finalPizzaName = this.choices.style === 'Mitad y Mitad / Combinada' 
             ? `Pizza Combinada: [ M1: ${this.choices.flavor1.name} / M2: ${this.choices.flavor2.name} ]`
             : `Pizza: [ Sabor: ${this.choices.flavor1.name} ]`;
@@ -267,6 +278,21 @@ const spwa = {
         };
         
         spwaAddToCartUnified(pizzaItem);
+
+        // 2. NUEVO: Agregar la bebida como un ítem independiente en el carrito si se seleccionó una
+        if (this.choices.bebida.price > 0) {
+            const bebidaItem = {
+                key: `bebida-${this.choices.bebida.name.replace(/\s+/g, '-')}`,
+                nombre: `Bebida: ${this.choices.bebida.name}`,
+                tamano: '1.5 Litros',
+                portions: '-',
+                borde: '', // Las bebidas no tienen borde
+                precio: this.choices.bebida.price,
+                cantidad: 1
+            };
+            spwaAddToCartUnified(bebidaItem);
+        }
+
         this.resetSPWA();
     },
 
@@ -276,6 +302,7 @@ const spwa = {
         this.history = ['step-1'];
         this.currentFlavorContext = ''; 
         this.currentStyleChoice = ''; 
+        this.choices.bebida = { name: '', price: 0 }; // <-- Resetear bebida
         
         const borderRadiosSPWA = document.querySelectorAll('input[name="borde-final-spwa"]');
         borderRadiosSPWA.forEach(radio => radio.checked = radio.value === 'Sin Borde Adicional');
@@ -290,6 +317,7 @@ spwa.init();
    LÓGICA DEL CARRITO UNIFICADO Y WHATSAPP
    ========================================= */
 let carrito = [];
+let costoDomicilio = 0; // Variable global para el costo del domicilio
 const formatoMonedaColombiaUnified = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 });
 
 window.spwaAddToCartUnified = (itemToAdd) => {
@@ -309,15 +337,17 @@ window.cambiarCantidadUnified = (key, delta) => {
 
 function actualizarCarritoUnifiedUI() {
     const contenedorItems = document.getElementById('items-carrito');
+    const subtotalElemento = document.getElementById('subtotal-carrito');
+    const domicilioElemento = document.getElementById('domicilio-carrito');
     const totalElementoUnified = document.getElementById('total-carrito');
     const btnBurbujaContador = document.getElementById('contador-burbuja');
 
-    let totalCompra = 0;
+    let subtotalCompra = 0;
     let cantidadTotalCompra = 0;
 
     contenedorItems.innerHTML = carrito.map(item => {
         const subtotalItemUnified = item.precio * item.cantidad;
-        totalCompra += subtotalItemUnified;
+        subtotalCompra += subtotalItemUnified;
         cantidadTotalCompra += item.cantidad;
         
         let adicBordeHtml = (item.borde && item.borde !== 'Sin Borde Adicional') ? `<p style="color:#D32F2F; font-size:0.75rem;">+ ${item.borde}</p>` : '';
@@ -340,8 +370,15 @@ function actualizarCarritoUnifiedUI() {
         `;
     }).join('');
 
+    // Cálculo final sumando el domicilio
+    let totalCompra = subtotalCompra + costoDomicilio;
+
+    // Actualización visual de los 3 valores
+    subtotalElemento.textContent = formatoMonedaColombiaUnified.format(subtotalCompra);
+    domicilioElemento.textContent = formatoMonedaColombiaUnified.format(costoDomicilio);
     totalElementoUnified.textContent = formatoMonedaColombiaUnified.format(totalCompra);
     btnBurbujaContador.textContent = cantidadTotalCompra;
+    
     spwaValidarFormulario();
 };
 
@@ -349,10 +386,11 @@ const sidebarElemento = document.getElementById('sidebar-carrito');
 window.abrirCarrito = () => sidebarElemento.classList.add('activo');
 window.cerrarCarrito = () => sidebarElemento.classList.remove('activo');
 
-document.getElementById('btn-carrito-global').addEventListener('click', abrirCarrito);
-document.getElementById('btn-cerrar-carrito').addEventListener('click', cerrarCarrito);
-
+// --- REFERENCIAS DEL FORMULARIO ---
 const inputNombreCliente = document.getElementById('cliente-nombre');
+const selectTipoEntrega = document.getElementById('cliente-tipo-entrega');
+const contenedorDomicilio = document.getElementById('contenedor-domicilio');
+const selectBarrioCliente = document.getElementById('cliente-barrio');
 const inputDireccionCliente = document.getElementById('cliente-direccion');
 const selectMetodoPago = document.getElementById('cliente-metodo-pago');
 const containerEfectivo = document.getElementById('pago-efectivo-container');
@@ -360,7 +398,27 @@ const containerTransferencia = document.getElementById('pago-transferencia-conta
 const inputMontoEfectivo = document.getElementById('cliente-monto-efectivo');
 const btnPagarWhatsApp = document.getElementById('btn-pagar');
 
-// Listeners de los nuevos campos
+// --- EVENT LISTENERS ---
+// Lógica para mostrar/ocultar campos de domicilio
+selectTipoEntrega.addEventListener('change', (e) => {
+    if (e.target.value === 'Recoger') {
+        contenedorDomicilio.classList.add('is-hidden');
+        costoDomicilio = 0; // Si recoge, no hay cobro
+    } else {
+        contenedorDomicilio.classList.remove('is-hidden');
+        // Si vuelve a Domicilio, recalcula basado en el barrio si ya había elegido uno
+        const opcionSeleccionada = selectBarrioCliente.options[selectBarrioCliente.selectedIndex];
+        costoDomicilio = opcionSeleccionada && !opcionSeleccionada.disabled ? (parseInt(opcionSeleccionada.dataset.precio) || 0) : 0;
+    }
+    actualizarCarritoUnifiedUI();
+});
+
+selectBarrioCliente.addEventListener('change', (e) => {
+    const opcionSeleccionada = e.target.options[e.target.selectedIndex];
+    costoDomicilio = parseInt(opcionSeleccionada.dataset.precio) || 0;
+    actualizarCarritoUnifiedUI(); 
+});
+
 selectMetodoPago.addEventListener('change', (e) => {
     const metodo = e.target.value;
     if (metodo === 'Efectivo') {
@@ -372,60 +430,85 @@ selectMetodoPago.addEventListener('change', (e) => {
     }
     spwaValidarFormulario();
 });
-inputMontoEfectivo.addEventListener('input', spwaValidarFormulario);
 
+inputMontoEfectivo.addEventListener('input', spwaValidarFormulario);
+inputDireccionCliente.addEventListener('input', spwaValidarFormulario);
 inputNombreCliente.addEventListener('input', (e) => {
     e.target.value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
     spwaValidarFormulario();
 });
-inputDireccionCliente.addEventListener('input', spwaValidarFormulario);
 
 function spwaValidarFormulario() {
-    let nombreValido = inputNombreCliente.value.trim().length >= 3;
-    let direccionValida = inputDireccionCliente.value.trim() !== '';
+    let nombreValido = inputNombreCliente.value.trim().length >= 9; // Validación de 9 caracteres
+    let tipoEntregaValido = selectTipoEntrega.value !== '';
     let carritoLleno = carrito.length > 0;
-    let pagoValido = false;
+    
+    // Variables por defecto en true (Para el caso de "Recoger")
+    let barrioValido = true;
+    let direccionValida = true;
 
-    // Validación condicional del pago
+    // Si es a domicilio, forzamos la validación real
+    if (selectTipoEntrega.value === 'Domicilio') {
+        barrioValido = selectBarrioCliente.value !== '';
+        direccionValida = inputDireccionCliente.value.trim() !== '';
+    }
+
+    let pagoValido = false;
     if (selectMetodoPago.value === 'Transferencia') {
         pagoValido = true;
     } else if (selectMetodoPago.value === 'Efectivo') {
-        pagoValido = inputMontoEfectivo.value.trim() !== ''; // Exigir que escriba un monto
+        pagoValido = inputMontoEfectivo.value.trim() !== ''; 
     }
 
-    btnPagarWhatsApp.disabled = !(nombreValido && direccionValida && carritoLleno && pagoValido);
+    btnPagarWhatsApp.disabled = !(nombreValido && tipoEntregaValido && barrioValido && direccionValida && carritoLleno && pagoValido);
 };
 
 window.enviarWhatsApp = () => {
     if (btnPagarWhatsApp.disabled) return;
-    let total = 0;
-    let mensaje = `🍕 *NUEVO PEDIDO - MICHE PIZZA* 🍕\n\n*Cliente:* ${inputNombreCliente.value.trim()}\n*Dirección:* ${inputDireccionCliente.value.trim()}\n\n*Detalle de la Orden:*\n`;
+    
+    let subtotal = 0;
+    let mensaje = `🍕 *NUEVO PEDIDO - MICHE PIZZA* 🍕\n\n*Cliente:* ${inputNombreCliente.value.trim()}\n`;
+
+    // Adaptar mensaje según entrega
+    if (selectTipoEntrega.value === 'Recoger') {
+        mensaje += `*Entrega:* 🏪 Pasará a recoger en tienda\n\n`;
+    } else {
+        mensaje += `*Entrega:* 🛵 Domicilio\n*Dirección:* ${inputDireccionCliente.value.trim()} (${selectBarrioCliente.value})\n\n`;
+    }
+
+    mensaje += `*Detalle de la Orden:*\n`;
 
     carrito.forEach(item => {
-        const subtotal = item.precio * item.cantidad;
-        total += subtotal;
+        const subtotalItem = item.precio * item.cantidad;
+        subtotal += subtotalItem;
         mensaje += `- ${item.cantidad}x ${item.nombre} (${item.tamano})\n`;
         if (item.borde && item.borde !== 'Sin Borde Adicional') mensaje += `  ✨ Adición: ${item.borde}\n`;
-        mensaje += `  Subtotal: ${formatoMonedaColombiaUnified.format(subtotal)}\n`;
+        mensaje += `  Subtotal: ${formatoMonedaColombiaUnified.format(subtotalItem)}\n`;
     });
 
-    mensaje += `\n*TOTAL A PAGAR: ${formatoMonedaColombiaUnified.format(total)}*\n`;
+    let totalPagar = subtotal + costoDomicilio;
+
+    // Desglose del total en el mensaje
+    if (selectTipoEntrega.value === 'Domicilio') {
+        mensaje += `\n*Subtotal Pizzas:* ${formatoMonedaColombiaUnified.format(subtotal)}`;
+        mensaje += `\n*Domicilio (${selectBarrioCliente.value}):* ${formatoMonedaColombiaUnified.format(costoDomicilio)}`;
+    }
+    mensaje += `\n*TOTAL A PAGAR: ${formatoMonedaColombiaUnified.format(totalPagar)}*\n`;
     
     // Anexar detalles del pago
     mensaje += `\n*Método de Pago:* ${selectMetodoPago.value}`;
     if (selectMetodoPago.value === 'Efectivo') {
         const montoEfectivo = parseFloat(inputMontoEfectivo.value);
-        const cambio = montoEfectivo - total;
+        const cambio = montoEfectivo - totalPagar;
         mensaje += `\n*Paga con:* ${formatoMonedaColombiaUnified.format(montoEfectivo)}`;
         mensaje += `\n*Cambio a llevar:* ${cambio >= 0 ? formatoMonedaColombiaUnified.format(cambio) : 'Pendiente'}`;
     } else {
         mensaje += `\n*(Comprobante adjunto en el chat)*`;
     }
 
-    window.open(`https://wa.me/573244022566?text=${encodeURIComponent(mensaje)}`, '_blank');
+    window.open(`https://wa.me/573137416559?text=${encodeURIComponent(mensaje)}`, '_blank');
 };
 
-// Listeners de los botones del carrito
 document.getElementById('btn-carrito-global').addEventListener('click', abrirCarrito);
 document.getElementById('btn-cerrar-carrito').addEventListener('click', cerrarCarrito);
 btnPagarWhatsApp.addEventListener('click', enviarWhatsApp);
