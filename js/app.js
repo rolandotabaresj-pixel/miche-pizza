@@ -159,45 +159,55 @@ const spwa = {
 
     renderCatalog: function() {
         this.elements.panelCatalogoGrid.innerHTML = productsData.map(prod => {
+            const isAgotado = prod.nombre.toLowerCase() === 'salami';
+            const disabledAttr = isAgotado ? 'disabled style="background-color: #cccccc; cursor: not-allowed; opacity: 0.7;"' : '';
+            const btnText = isAgotado ? 'Agotado' : 'Elegir sabor';
+
             return `
                 <article class="tarjeta-producto">
                 <div class="tarjeta-producto-imagen-contenedor">    
                     <img src="${prod.img}" alt="${prod.nombre}" loading="lazy"></div>               
                     <h3>${prod.nombre}</h3>
                     <p class="ingredientes"><strong>Ingredientes:</strong> ${prod.ingredientes}</p>
-                    <button id="btn-flavor-${prod.id}">Elegir sabor</button>
+                    <button id="btn-flavor-${prod.id}" ${disabledAttr}>${btnText}</button>
                 </article>
             `;
         }).join('');
 
         productsData.forEach(prod => {
-            document.getElementById(`btn-flavor-${prod.id}`).addEventListener('click', () => {
-                this.handleFlavorSelection(prod.id, prod.nombre, prod.img);
-            });
+            if (prod.nombre.toLowerCase() !== 'salami') {
+                document.getElementById(`btn-flavor-${prod.id}`).addEventListener('click', () => {
+                    this.handleFlavorSelection(prod.id, prod.nombre, prod.img);
+                });
+            }
         });
     },
 
     updateCatalogStepUI: function() {
-        const flavorButtons = this.elements.panelCatalogoGrid.querySelectorAll('button');
-        
-        if (this.currentStyleChoice === 'Mitad y Mitad / Combinada') {
-            if (this.currentFlavorContext === 'Mitad 1') {
-                flavorButtons.forEach(btn => {
+        productsData.forEach(prod => {
+            const btn = document.getElementById(`btn-flavor-${prod.id}`);
+            if (!btn) return;
+
+            // Mantener deshabilitado el botón si es Salami
+            if (prod.nombre.toLowerCase() === 'salami') {
+                btn.textContent = "Agotada";
+                btn.disabled = true;
+                return;
+            }
+
+            if (this.currentStyleChoice === 'Mitad y Mitad / Combinada') {
+                if (this.currentFlavorContext === 'Mitad 1') {
                     btn.textContent = "Elegir como Mitad 1";
                     btn.classList.add('Mitad-1-Context');
-                });
-            } else {
-                flavorButtons.forEach(btn => {
+                } else {
                     btn.textContent = "Combinar y Continuar";
                     btn.classList.remove('Mitad-1-Context');
-                });
-            }
-        } else {
-            flavorButtons.forEach(btn => {
+                }
+            } else {
                 btn.textContent = "Elegir sabor y continuar";
                 btn.classList.remove('Mitad-1-Context');
-            });
-        }
+            }
+        });
     },
 
     handleFlavorSelection: function(flavorId, flavorName, flavorImg) {
@@ -222,12 +232,12 @@ const spwa = {
         const portionsText = this.elements.panelFinalLargeCardPortions;
         
         if (this.choices.style === 'Mitad y Mitad / Combinada') {
-            this.elements.panelFinalLargeCardImg.src = "https://images.unsplash.com/photo-1548369937-47519962c11a?auto=format&fit=crop&w=600&q=80";
+            this.elements.panelFinalLargeCardImg.src = "assets/borde.jpeg";
             portionsText.innerHTML = `Mitad 1: ${this.choices.flavor1.name} <br> Mitad 2: ${this.choices.flavor2.name}`;
             portionsText.classList.remove('is-hidden');
             portionsText.classList.add('final-card-portions-text');
         } else {
-            this.elements.panelFinalLargeCardImg.src = this.choices.flavor1.img;
+            this.elements.panelFinalLargeCardImg.src = "assets/borde.jpeg";
             portionsText.classList.add('is-hidden');
             portionsText.classList.remove('final-card-portions-text');
         }

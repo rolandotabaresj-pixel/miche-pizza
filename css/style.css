@@ -346,7 +346,7 @@ body {
 
     .hero-seccion-principal { padding: 5rem 1.5rem 4rem 1.5rem; }
     
-    .avatar-miche { display: block; position: absolute; bottom: 0; left: 2%; width: 130px; height: auto; z-index: 3; }
+    .avatar-miche { display: block; position: absolute; bottom: 0; left: 2%; width: 120px; height: auto; z-index: 3; }
 
     .hero-contenido-texto {
         display: flex;
@@ -415,7 +415,7 @@ body {
        ============================================================================== */
     .sidebar-footer {
         /* Mantenemos paddings laterales y superior originales, pero inflamos el inferior */
-        padding: 1.5rem 1.5rem 100px 1.5rem; /* <--- 200px de colchón vacío */
+        padding: 1.5rem 1.5rem 120px 1.5rem; /* <--- 350px de colchón vacío */
         background: #fafafa;
         border-top: 1px solid rgba(0,0,0,0.08);
         position: relative;
@@ -492,5 +492,59 @@ body {
         display: flex;
         align-items: center;
         justify-content: flex-end;
+    }
+}
+
+/* =========================================
+   13. PIE DE PÁGINA (FOOTER)
+   ========================================= */
+.footer-principal {
+    background-color: var(--color-fondo-tarjeta);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 1.5rem 5%;
+    margin-top: 2rem;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.footer-contenido {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.footer-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-texto);
+}
+
+.footer-icono {
+    color: var(--color-primario);
+    font-size: 1.2rem;
+}
+
+.footer-link {
+    color: var(--color-texto);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: #25D366;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 768px) {
+    .footer-contenido {
+        flex-direction: column;
+        gap: 1rem;
     }
 }
