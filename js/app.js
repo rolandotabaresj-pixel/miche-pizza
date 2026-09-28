@@ -168,7 +168,7 @@ const spwa = {
                     <img src="${prod.img}" alt="${prod.nombre}" loading="lazy"></div>               
                     <h3>${prod.nombre}</h3>
                     <p class="ingredientes"><strong>Ingredientes:</strong> ${prod.ingredientes}</p>
-                    <button id="btn-flavor-${prod.id}" ${disabledAttr}>${btnText}</button>
+                    <button type="button" id="btn-flavor-${prod.id}" ${disabledAttr}>${btnText}</button>
                 </article>
             `;
         }).join('');
@@ -590,19 +590,28 @@ window.enviarWhatsApp = () => {
     window.open(`https://wa.me/573137416559?text=${encodeURIComponent(mensaje)}`, '_blank');
 };
 
-// --- APERTURA Y CIERRE DEL CARRITO ---
 document.getElementById('btn-carrito-global').addEventListener('click', abrirCarrito);
 document.getElementById('btn-cerrar-carrito').addEventListener('click', cerrarCarrito);
 
-// --- INTERCEPTOR PRINCIPAL PARA ABRIR EL TIQUET ---
+// --- INTERCEPTOR PRINCIPAL PARA ABRIR EL TIQUET (CON FAIL-SAFE) ---
 btnPagarWhatsApp.addEventListener('click', (e) => {
     e.preventDefault();
     if (btnPagarWhatsApp.disabled) return;
     
-    cerrarCarrito(); // Oculta el sidebar para dar visibilidad total al tiquet
-    spwaPintarTiquetModal();
-    
-    if (modalTiquet) {
+    try {
+        // VALIDACIÓN DE SEGURIDAD: Si no detecta el modal en el HTML, pasa directo a WhatsApp
+        if (!modalTiquet) {
+            console.warn("HTML del tiquet no encontrado. Redirigiendo a WhatsApp directo.");
+            window.enviarWhatsApp();
+            return;
+        }
+
+        cerrarCarrito();
+        spwaPintarTiquetModal();
         modalTiquet.classList.remove('is-hidden');
+
+    } catch (error) {
+        console.error("Error al renderizar el tiquet:", error);
+        window.enviarWhatsApp(); // Asegura que el cliente siempre pueda pedir
     }
 });
