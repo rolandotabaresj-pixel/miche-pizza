@@ -247,9 +247,13 @@ const spwa = {
         const borderPrice = preciosBordesData[this.choices.size.name] || 8000; 
         const formattedPrice = `+${formatoMonedaColombiaUnified.format(borderPrice)}`;
         
-        document.getElementById('price-borde-queso-spwa').textContent = formattedPrice;
-        document.getElementById('price-borde-bocadillo-spwa').textContent = formattedPrice;
-        document.getElementById('price-borde-arequipe-spwa').textContent = formattedPrice;
+        const elQueso = document.getElementById('price-borde-queso-spwa');
+        const elBocadillo = document.getElementById('price-borde-bocadillo-spwa');
+        const elArequipe = document.getElementById('price-borde-arequipe-spwa');
+
+        if (elQueso) elQueso.textContent = formattedPrice;
+        if (elBocadillo) elBocadillo.textContent = formattedPrice;
+        if (elArequipe) elArequipe.textContent = formattedPrice;
         
         const borderRadios = document.querySelectorAll('input[name="borde-final-spwa"]');
         borderRadios.forEach(radio => {
@@ -286,7 +290,7 @@ const spwa = {
         
         spwaAddToCartUnified(pizzaItem);
 
-        if (this.choices.bebida.price > 0) {
+        if (this.choices.bebida && this.choices.bebida.price > 0) {
             const bebidaItem = {
                 key: `bebida-${this.choices.bebida.name.replace(/\s+/g, '-')}`,
                 nombre: `Bebida: ${this.choices.bebida.name}`,
@@ -328,7 +332,11 @@ const formatoMonedaColombiaUnified = new Intl.NumberFormat('es-CO', { style: 'cu
 
 window.spwaAddToCartUnified = (itemToAdd) => {
     const itemEnCarrito = carrito.find(item => item.key === itemToAdd.key);
-    if (itemEnCarrito) { itemEnCarrito.cantidad++; } else { carrito.push(itemToAdd); }
+    if (itemEnCarrito) { 
+        itemEnCarrito.cantidad++; 
+    } else { 
+        carrito.push(itemToAdd); 
+    }
     actualizarCarritoUnifiedUI();
     abrirCarrito();
 };
@@ -337,7 +345,9 @@ window.cambiarCantidadUnified = (key, delta) => {
     const item = carrito.find(i => i.key === key);
     if (!item) return;
     item.cantidad += delta;
-    if (item.cantidad <= 0) carrito = carrito.filter(i => i.key !== key);
+    if (item.cantidad <= 0) {
+        carrito = carrito.filter(i => i.key !== key);
+    }
     actualizarCarritoUnifiedUI();
 };
 
@@ -366,9 +376,9 @@ function actualizarCarritoUnifiedUI() {
                     ${adicBordeHtml}
                     <p>${formatoMonedaColombiaUnified.format(item.precio)} c/u</p>
                     <div class="item-controles">
-                        <button onclick="window.cambiarCantidadUnified('${item.key}', -1)">-</button>
+                        <button type="button" onclick="window.cambiarCantidadUnified('${item.key}', -1)">-</button>
                         <span style="margin: 0 8px; font-weight: 600;">${item.cantidad}</span>
-                        <button onclick="window.cambiarCantidadUnified('${item.key}', 1)">+</button>
+                        <button type="button" onclick="window.cambiarCantidadUnified('${item.key}', 1)">+</button>
                     </div>
                 </div>
                 <div class="item-subtotal">${formatoMonedaColombiaUnified.format(subtotalItemUnified)}</div>
@@ -384,7 +394,7 @@ function actualizarCarritoUnifiedUI() {
     btnBurbujaContador.textContent = cantidadTotalCompra;
     
     spwaValidarFormulario();
-};
+}
 
 const sidebarElemento = document.getElementById('sidebar-carrito');
 window.abrirCarrito = () => sidebarElemento.classList.add('activo');
@@ -402,7 +412,12 @@ const containerTransferencia = document.getElementById('pago-transferencia-conta
 const inputMontoEfectivo = document.getElementById('cliente-monto-efectivo');
 const btnPagarWhatsApp = document.getElementById('btn-pagar');
 
-// --- EVENT LISTENERS ---
+// --- REFERENCIAS DEL MODAL TIQUET ---
+const modalTiquet = document.getElementById('modal-tiquet');
+const btnTiquetCorregir = document.getElementById('btn-tiquet-corregir');
+const btnTiquetConfirmar = document.getElementById('btn-tiquet-confirmar');
+
+// --- EVENT LISTENERS DE FORMULARIO ---
 selectTipoEntrega.addEventListener('change', (e) => {
     if (e.target.value === 'Recoger') {
         contenedorDomicilio.classList.add('is-hidden');
@@ -434,7 +449,9 @@ selectMetodoPago.addEventListener('change', (e) => {
 });
 
 inputMontoEfectivo.addEventListener('input', spwaValidarFormulario);
+inputMontoEfectivo.addEventListener('change', spwaValidarFormulario);
 inputDireccionCliente.addEventListener('input', spwaValidarFormulario);
+
 inputNombreCliente.addEventListener('input', (e) => {
     e.target.value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
     spwaValidarFormulario();
@@ -465,15 +482,11 @@ function spwaValidarFormulario() {
     }
 
     btnPagarWhatsApp.disabled = !(nombreValido && tipoEntregaValido && barrioValido && direccionValida && carritoLleno && pagoValido);
-};
+}
 
 // =========================================
 // TIQUET DE CONFIRMACIÓN PREVIO A WHATSAPP
 // =========================================
-const modalTiquet = document.getElementById('modal-tiquet');
-const btnTiquetCorregir = document.getElementById('btn-tiquet-corregir');
-const btnTiquetConfirmar = document.getElementById('btn-tiquet-confirmar');
-
 function spwaPintarTiquetModal() {
     const contenedor = document.getElementById('tiquet-detalles');
     const totales = document.getElementById('tiquet-totales');
@@ -507,7 +520,7 @@ function spwaPintarTiquetModal() {
     if (selectMetodoPago.value === 'Efectivo') {
         const montoIngresado = parseFloat(inputMontoEfectivo.value) || 0;
         const cambio = montoIngresado - totalPagar;
-        metodoPagoTexto += ` (Paga: ${formatoMonedaColombiaUnified.format(montoIngresado)} | Cambio: ${cambio >= 0 ? formatoMonedaColombiaUnified.format(cambio) : '$0'})`;
+        metodoPagoTexto += ` (Paga con: ${formatoMonedaColombiaUnified.format(montoIngresado)} | Cambio: ${cambio >= 0 ? formatoMonedaColombiaUnified.format(cambio) : '$0'})`;
     }
 
     totales.innerHTML = `
@@ -525,6 +538,7 @@ function spwaPintarTiquetModal() {
 if (btnTiquetCorregir) {
     btnTiquetCorregir.addEventListener('click', () => {
         if (modalTiquet) modalTiquet.classList.add('is-hidden');
+        abrirCarrito(); // Regresa al carrito para ajustar datos
     });
 }
 
@@ -565,7 +579,7 @@ window.enviarWhatsApp = () => {
     
     mensaje += `\n*Método de Pago:* ${selectMetodoPago.value}`;
     if (selectMetodoPago.value === 'Efectivo') {
-        const montoEfectivo = parseFloat(inputMontoEfectivo.value);
+        const montoEfectivo = parseFloat(inputMontoEfectivo.value) || 0;
         const cambio = montoEfectivo - totalPagar;
         mensaje += `\n*Paga con:* ${formatoMonedaColombiaUnified.format(montoEfectivo)}`;
         mensaje += `\n*Cambio a llevar:* ${cambio >= 0 ? formatoMonedaColombiaUnified.format(cambio) : 'Pendiente'}`;
@@ -576,13 +590,19 @@ window.enviarWhatsApp = () => {
     window.open(`https://wa.me/573137416559?text=${encodeURIComponent(mensaje)}`, '_blank');
 };
 
+// --- APERTURA Y CIERRE DEL CARRITO ---
 document.getElementById('btn-carrito-global').addEventListener('click', abrirCarrito);
 document.getElementById('btn-cerrar-carrito').addEventListener('click', cerrarCarrito);
 
-// Interceptar el clic para abrir el tiquet antes de disparar el envío
+// --- INTERCEPTOR PRINCIPAL PARA ABRIR EL TIQUET ---
 btnPagarWhatsApp.addEventListener('click', (e) => {
     e.preventDefault();
     if (btnPagarWhatsApp.disabled) return;
+    
+    cerrarCarrito(); // Oculta el sidebar para dar visibilidad total al tiquet
     spwaPintarTiquetModal();
-    if (modalTiquet) modalTiquet.classList.remove('is-hidden');
+    
+    if (modalTiquet) {
+        modalTiquet.classList.remove('is-hidden');
+    }
 });
