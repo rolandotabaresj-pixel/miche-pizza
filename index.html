@@ -293,6 +293,28 @@
         </div>     
     </aside>
 
+    <!-- MODAL TIQUET DE CONFIRMACIÓN -->
+    <div id="modal-tiquet" class="modal-tiquet-overlay is-hidden">
+        <div class="tiquet-recibo">
+            <div class="tiquet-header">
+                <h3>🍕 MICHE PIZZA</h3>
+                <p>Resumen de tu Pedido</p>
+                <div class="tiquet-linea">---------------------------------</div>
+            </div>
+            <div id="tiquet-detalles" class="tiquet-cuerpo">
+                <!-- Se llena dinámicamente desde js/app.js -->
+            </div>
+            <div class="tiquet-linea">---------------------------------</div>
+            <div id="tiquet-totales" class="tiquet-totales">
+                <!-- Totales y datos del cliente dinámicos -->
+            </div>
+            <div class="tiquet-acciones">
+                <button id="btn-tiquet-corregir" type="button" class="btn-secundario">Corregir</button>
+                <button id="btn-tiquet-confirmar" type="button" class="btn-primario">Confirmar y Enviar</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="js/app.js"></script>
 </body>
 </html>
