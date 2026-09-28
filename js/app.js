@@ -449,7 +449,7 @@ inputNombreCliente.addEventListener('input', (e) => {
 });
 
 function spwaValidarFormulario() {
-    let nombreValido = inputNombreCliente.value.trim().length >= 9; // Validación de 9 caracteres
+    let nombreValido = inputNombreCliente.value.trim().length >= 3;
     let tipoEntregaValido = selectTipoEntrega.value !== '';
     let carritoLleno = carrito.length > 0;
     
@@ -463,11 +463,16 @@ function spwaValidarFormulario() {
         direccionValida = inputDireccionCliente.value.trim() !== '';
     }
 
+    // Calcular el total actual a pagar
+    let subtotalActual = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+    let totalPagarActual = subtotalActual + costoDomicilio;
+
     let pagoValido = false;
     if (selectMetodoPago.value === 'Transferencia') {
         pagoValido = true;
     } else if (selectMetodoPago.value === 'Efectivo') {
-        pagoValido = inputMontoEfectivo.value.trim() !== ''; 
+        const montoIngresado = parseFloat(inputMontoEfectivo.value) || 0;
+        pagoValido = montoIngresado >= totalPagarActual;
     }
 
     btnPagarWhatsApp.disabled = !(nombreValido && tipoEntregaValido && barrioValido && direccionValida && carritoLleno && pagoValido);
