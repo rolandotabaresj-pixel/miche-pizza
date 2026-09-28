@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Miche Pizza - Pizzería Artesanal (SPWA)</title>
+
+    <!-- Metadatos Open Graph para vista previa en WhatsApp y Redes -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://michepizza.github.io/miche-pizza-web/">
+    <meta property="og:title" content="Miche Pizza · Menú y Pedidos">
+    <meta property="og:description" content="¡Pide tu pizza favorita en segundos! Elige tamaño, sabores y adiciones.">
+    <meta property="og:image" content="https://michepizza.github.io/miche-pizza-web/assets/banner-compartir.jpg">
+    <meta property="og:image:secure_url" content="https://michepizza.github.io/miche-pizza-web/assets/banner-compartir.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
     <link rel="preload" href="font/bookmanoldstyle_bolditalic.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="font/komikax.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="font/FREESCPT.TTF" as="font" type="font/ttf" crossorigin>
@@ -14,12 +26,10 @@
 <body>
 
     <header class="header-principal">        
-        
         <div class="header-logo-container"></div>               
-        
-            <button class="btn-carrito" id="btn-carrito-global">
-                <i class="fas fa-receipt"></i> Mi orden <i class="fas fa-pizza-slice"></i> al horno <span id="contador-burbuja">0</span>
-            </button>
+        <button class="btn-carrito" id="btn-carrito-global">
+            <i class="fas fa-receipt"></i> Mi orden <i class="fas fa-pizza-slice"></i> al horno <span id="contador-burbuja">0</span>
+        </button>
     </header>
 
     <main id="spwa-main" class="spwa-container" style="padding-top: 0; max-width: 100%;">
@@ -33,15 +43,9 @@
 
         <!-- PASO 1: CONTENEDOR GENERAL QUE AGRUPA EL HERO Y LAS TARJETAS -->
         <section id="step-1" class="step-panel activo" style="gap: 0;">
-
-           
             <div class="hero-seccion-principal">
                 <div class="hero-overlay-degradado"></div>
-
-                <!-- AVATAR AQUÍ: Directamente hijo de la sección principal -->
                 <img src="assets/avatar.png" alt="Avatar Miche" class="avatar-miche">
-
-                <!-- CONTENEDOR DE TEXTO: Ya sin el avatar adentro -->
                 <div class="hero-contenido-texto">
                     <div class="logo-text-group-hero">
                         <h1 class="logo">
@@ -52,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            <!-- BLOQUE 2: Las tarjetas de selección como una sección independiente abajo -->
+            
             <div class="tarjetas-seccion-inferior">
                 <div class="seccion-titulo" style="margin-bottom: 2rem;">
                     <h1>1. ¿De qué tamaño la armamos hoy?</h1>
@@ -85,9 +89,9 @@
                     </div>
                 </div>
             </div>
-
         </section>
 
+        <!-- PASO 2: SABORES -->
         <section id="step-2" class="step-panel binary-step-grid seccion-titulo">
             <h2>2. ¿Cómo prefieres tu pizza?</h2>
             <div class="binary-card-grid">
@@ -110,87 +114,80 @@
                 <h2 id="flavor-progress-title">...</h2>
                 <div id="flavor-chosen-banner" class="flavor-chosen-banner">...</div>
             </div>
-            <div id="catalog-flavor-grid" class="catalog-flavor-grid">
-            </div>
+            <div id="catalog-flavor-grid" class="catalog-flavor-grid"></div>
         </section>
-        <!-- NUEVO PASO 4: BEBIDAS -->
+
+        <!-- PASO 4: BEBIDAS -->
         <section id="step-bebidas" class="step-panel seccion-titulo">
             <h2>4. ¡Completa tu experiencia!</h2>
             <p>El mejor acompañante para tu pizza.</p>
             <div class="large-card-grid">
-                
-                <!-- Tarjeta Pepsi -->
                 <div class="large-card bebida-card" data-step="step-final" data-bebida="Pepsi" data-price="7000">
                     <div class="tarjeta-producto-imagen-contenedor">
                         <img src="assets/pepsi.jpeg" alt="Pepsi 1.5L">
                     </div>
                 </div>
-                
-                <!-- Tarjeta Colombiana -->
                 <div class="large-card bebida-card" data-step="step-final" data-bebida="Colombiana" data-price="7000">
                     <div class="tarjeta-producto-imagen-contenedor">
                         <img src="assets/colombiana.jpeg" alt="Colombiana 1.5L">
                     </div>
                 </div>
-                
-                <!-- Tarjeta Manzana -->
                 <div class="large-card bebida-card" data-step="step-final" data-bebida="Manzana Postobón" data-price="7000">
                     <div class="tarjeta-producto-imagen-contenedor">
                         <img src="assets/manzana.jpeg" alt="Manzana 1.5L">
                     </div>
                 </div>
-                
-                <!-- Tarjeta Ninguna -->
                 <div class="large-card bebida-card" data-step="step-final" data-bebida="Ninguna" data-price="0">
                     <div class="tarjeta-producto-imagen-contenedor">
                         <img src="assets/sin-bebida.jpeg" alt="No, gracias. Sin bebida">
                     </div>
                 </div>
-                
             </div>
         </section>
+
+        <!-- PASO 3: BORDE -->
         <section id="step-final" class="step-panel Final large-card Final seccion-titulo">
             <h2>3. ¿Deseas llevar tu borde al siguiente nivel?</h2>
             <div id="step-final-large-card" class="large-card Final is-hidden">
                 <img id="final-card-img" src="" alt="Resumen de Pizza">
                 <p id="final-card-portions" class="is-hidden"></p>
-                 <div class="grupo-adiciones">
-                        <!-- Opción: Borde de Queso -->
-                        <label class="opcion-adicion">
-                            <input type="radio" name="borde-final-spwa" value="Borde Relleno de Queso" class="hidden-radio">
-                            <span class="option-text">Borde Relleno de Queso</span>
-                            <div class="adicion-precio">
-                                <span id="price-borde-queso-spwa" class="precio-adicion-dinamico"></span>
-                            </div>
-                        </label>
-
-                        <!-- Opción: Borde de Bocadillo -->
-                        <label class="opcion-adicion">
-                            <input type="radio" name="borde-final-spwa" value="Borde de Bocadillo" class="hidden-radio">
-                            <span class="option-text">Borde de Bocadillo</span>
-                            <div class="adicion-precio">
-                                <span id="price-borde-bocadillo-spwa" class="precio-adicion-dinamico"></span>
-                            </div>
-                        </label>
-
-                        <!-- Opción: Borde de Arequipe -->
-                        <label class="opcion-adicion">
-                            <input type="radio" name="borde-final-spwa" value="Borde de Arequipe" class="hidden-radio">
-                            <span class="option-text">Borde de Arequipe</span>
-                            <div class="adicion-precio">
-                                <span id="price-borde-arequipe-spwa" class="precio-adicion-dinamico"></span>
-                            </div>
-                        </label>
-
-                        <!-- Opción: Sin Borde -->
-                        <label class="opcion-adicion">
-                            <input type="radio" name="borde-final-spwa" value="Sin Borde Adicional" class="hidden-radio" checked>
-                            <span class="option-text">❌ Sin Borde Adicional</span>
-                            <div class="adicion-precio">
-                                <span class="precio-adicion-gratis">+$0</span>
-                            </div>
-                        </label>
-                    </div>
+                <div class="grupo-adiciones">
+                    <!-- Opción: Borde de Queso (Visible) -->
+                    <label class="opcion-adicion">
+                        <input type="radio" name="borde-final-spwa" value="Borde Relleno de Queso" class="hidden-radio">
+                        <span class="option-text">Borde Relleno de Queso</span>
+                        <div class="adicion-precio">
+                            <span id="price-borde-queso-spwa" class="precio-adicion-dinamico"></span>
+                        </div>
+                    </label>
+                
+                    <!-- Opción: Borde de Bocadillo (Oculto temporalmente) -->
+                    <label class="opcion-adicion is-hidden">
+                        <input type="radio" name="borde-final-spwa" value="Borde de Bocadillo" class="hidden-radio">
+                        <span class="option-text">Borde de Bocadillo</span>
+                        <div class="adicion-precio">
+                            <span id="price-borde-bocadillo-spwa" class="precio-adicion-dinamico"></span>
+                        </div>
+                    </label>
+                
+                    <!-- Opción: Borde de Arequipe (Oculto temporalmente) -->
+                    <label class="opcion-adicion is-hidden">
+                        <input type="radio" name="borde-final-spwa" value="Borde de Arequipe" class="hidden-radio">
+                        <span class="option-text">Borde de Arequipe</span>
+                        <div class="adicion-precio">
+                            <span id="price-borde-arequipe-spwa" class="precio-adicion-dinamico"></span>
+                        </div>
+                    </label>
+                
+                    <!-- Opción: Sin Borde (Visible por defecto) -->
+                    <label class="opcion-adicion">
+                        <input type="radio" name="borde-final-spwa" value="Sin Borde Adicional" class="hidden-radio" checked>
+                        <span class="option-text">❌ Sin Borde Adicional</span>
+                        <div class="adicion-precio">
+                            <span class="precio-adicion-gratis">+$0</span>
+                        </div>
+                    </label>
+                </div>
                 <button id="btn-add-cart-final" class="btn-agregar-carrito-spwa">
                     ¡Agregar a la caja y pedir! 
                     <img src="assets/caja-de-pizza.png" alt="Caja de Pizza" style="width: 26px; height: auto; margin-left: 5px;">
@@ -214,6 +211,7 @@
         </div>
     </footer>
 
+    <!-- SIDEBAR CARRITO -->
     <aside id="sidebar-carrito" class="sidebar">
         <div class="sidebar-header">
             <h2>Tu Pedido</h2>
@@ -236,9 +234,9 @@
                 </div>
             </div>
             <div class="formulario-envio">
-                <input type="text" id="cliente-nombre" placeholder="Tu Nombre Completo (Ej: Ana Lopez)" autocomplete="off">
+                <input type="text" id="cliente-nombre" placeholder="Tu Nombre" autocomplete="off">
                 
-                <!-- NUEVO: TIPO DE ENTREGA -->
+                <!-- TIPO DE ENTREGA -->
                 <select id="cliente-tipo-entrega" class="select-pago">
                     <option value="" disabled selected>¿Cómo deseas recibir tu pedido?</option>
                     <option value="Recoger">Recoger en tienda</option>
@@ -252,6 +250,7 @@
                         <option value="San Pio" data-precio="3000">San Pio</option>
                         <option value="Valle sur" data-precio="3000">Valle sur</option>
                         <option value="Samaria" data-precio="6000">Samaria</option>
+                        <option value="Glorieta Pilsen" data-precio="6000">Glorieta Pilsen</option>
                         <option value="Yarumito" data-precio="6000">Yarumito</option>                    
                         <option value="Escocia" data-precio="4000">Escocia</option>
                         <option value="Suramérica" data-precio="7000">Suramérica</option>
