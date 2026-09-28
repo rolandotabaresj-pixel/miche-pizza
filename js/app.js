@@ -412,11 +412,6 @@ const containerTransferencia = document.getElementById('pago-transferencia-conta
 const inputMontoEfectivo = document.getElementById('cliente-monto-efectivo');
 const btnPagarWhatsApp = document.getElementById('btn-pagar');
 
-// --- REFERENCIAS DEL MODAL TIQUET ---
-const modalTiquet = document.getElementById('modal-tiquet');
-const btnTiquetCorregir = document.getElementById('btn-tiquet-corregir');
-const btnTiquetConfirmar = document.getElementById('btn-tiquet-confirmar');
-
 // --- EVENT LISTENERS DE FORMULARIO ---
 selectTipoEntrega.addEventListener('change', (e) => {
     if (e.target.value === 'Recoger') {
@@ -535,20 +530,6 @@ function spwaPintarTiquetModal() {
     `;
 }
 
-if (btnTiquetCorregir) {
-    btnTiquetCorregir.addEventListener('click', () => {
-        if (modalTiquet) modalTiquet.classList.add('is-hidden');
-        abrirCarrito(); // Regresa al carrito para ajustar datos
-    });
-}
-
-if (btnTiquetConfirmar) {
-    btnTiquetConfirmar.addEventListener('click', () => {
-        if (modalTiquet) modalTiquet.classList.add('is-hidden');
-        window.enviarWhatsApp();
-    });
-}
-
 window.enviarWhatsApp = () => {
     let subtotal = 0;
     let mensaje = `🍕 *NUEVO PEDIDO - MICHE PIZZA* 🍕\n\n*Cliente:* ${inputNombreCliente.value.trim()}\n`;
@@ -590,28 +571,48 @@ window.enviarWhatsApp = () => {
     window.open(`https://wa.me/573137416559?text=${encodeURIComponent(mensaje)}`, '_blank');
 };
 
+// --- APERTURA Y CIERRE DEL CARRITO ---
 document.getElementById('btn-carrito-global').addEventListener('click', abrirCarrito);
 document.getElementById('btn-cerrar-carrito').addEventListener('click', cerrarCarrito);
 
-// --- INTERCEPTOR PRINCIPAL PARA ABRIR EL TIQUET (CON FAIL-SAFE) ---
+// --- INTERCEPTOR PRINCIPAL DEL BOTON (NUEVO CONTROL DINÁMICO) ---
 btnPagarWhatsApp.addEventListener('click', (e) => {
     e.preventDefault();
     if (btnPagarWhatsApp.disabled) return;
     
     try {
-        // VALIDACIÓN DE SEGURIDAD: Si no detecta el modal en el HTML, pasa directo a WhatsApp
-        if (!modalTiquet) {
-            console.warn("HTML del tiquet no encontrado. Redirigiendo a WhatsApp directo.");
+        // En lugar de usar variables guardadas arriba, buscamos el tiquet dinámicamente en este instante
+        const modal = document.getElementById('modal-tiquet');
+        const btnConfirmar = document.getElementById('btn-tiquet-confirmar');
+        const btnCorregir = document.getElementById('btn-tiquet-corregir');
+
+        // Si falta algo en el HTML, abrimos WhatsApp de una vez
+        if (!modal || !btnConfirmar || !btnCorregir) {
+            console.warn("No se detectó el HTML del Tiquet. Enviando directamente.");
             window.enviarWhatsApp();
             return;
         }
 
-        cerrarCarrito();
+        // Llenar los datos del recibo
         spwaPintarTiquetModal();
-        modalTiquet.classList.remove('is-hidden');
+
+        // Asignar comportamiento a los botones del Tiquet
+        btnCorregir.onclick = function() {
+            modal.classList.add('is-hidden');
+            abrirCarrito();
+        };
+
+        btnConfirmar.onclick = function() {
+            modal.classList.add('is-hidden');
+            window.enviarWhatsApp();
+        };
+
+        // Mostrar Tiquet en pantalla
+        cerrarCarrito();
+        modal.classList.remove('is-hidden');
 
     } catch (error) {
-        console.error("Error al renderizar el tiquet:", error);
-        window.enviarWhatsApp(); // Asegura que el cliente siempre pueda pedir
+        console.error("Fallo inesperado al mostrar tiquet:", error);
+        window.enviarWhatsApp(); // Respaldo máximo de seguridad
     }
 });
