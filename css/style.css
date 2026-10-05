@@ -634,3 +634,10 @@ body {
     background: #25D366;
     color: #ffffff;
 }
+
+/* =========================================
+   15. CORRECCIÓN DE CAPAS MODAL OTRA PIZZA
+   ========================================= */
+#modal-otra-pizza {
+    z-index: 20000 !important; /* Estará por encima de cualquier otro elemento o tiquet */
+}
