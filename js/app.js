@@ -303,11 +303,26 @@ const spwa = {
             spwaAddToCartUnified(bebidaItem);
         }
 
-        this.resetSPWA();
+        this.mostrarModalOtraPizza();
+    },
+
+    mostrarModalOtraPizza: function() {
+        const currentStep = this.getCurrentStep();
+        if (currentStep && this.elements.panels[currentStep]) {
+            this.elements.panels[currentStep].classList.remove('activo');
+        }
+        
+        const modalOtraPizza = document.getElementById('modal-otra-pizza');
+        if (modalOtraPizza) {
+            modalOtraPizza.classList.remove('is-hidden');
+        }
     },
 
     resetSPWA: function() {
-        this.elements.panels[this.getCurrentStep()].classList.remove('activo');
+        const currentStep = this.getCurrentStep();
+        if (currentStep && this.elements.panels[currentStep]) {
+            this.elements.panels[currentStep].classList.remove('activo');
+        }
         
         this.history = ['step-1'];
         this.currentFlavorContext = ''; 
@@ -575,28 +590,45 @@ window.enviarWhatsApp = () => {
 document.getElementById('btn-carrito-global').addEventListener('click', abrirCarrito);
 document.getElementById('btn-cerrar-carrito').addEventListener('click', cerrarCarrito);
 
-// --- INTERCEPTOR PRINCIPAL DEL BOTON (NUEVO CONTROL DINÁMICO) ---
+// --- ACCIONES DEL MODAL DE OTRA PIZZA ---
+const modalOtraPizza = document.getElementById('modal-otra-pizza');
+const btnOtraPizza = document.getElementById('btn-otra-pizza');
+const btnVerPedido = document.getElementById('btn-ver-pedido');
+
+if (btnOtraPizza) {
+    btnOtraPizza.addEventListener('click', () => {
+        if (modalOtraPizza) modalOtraPizza.classList.add('is-hidden');
+        cerrarCarrito();
+        spwa.resetSPWA();
+    });
+}
+
+if (btnVerPedido) {
+    btnVerPedido.addEventListener('click', () => {
+        if (modalOtraPizza) modalOtraPizza.classList.add('is-hidden');
+        spwa.resetSPWA();
+        abrirCarrito();
+    });
+}
+
+// --- INTERCEPTOR PRINCIPAL DEL BOTON (CON FAIL-SAFE) ---
 btnPagarWhatsApp.addEventListener('click', (e) => {
     e.preventDefault();
     if (btnPagarWhatsApp.disabled) return;
     
     try {
-        // En lugar de usar variables guardadas arriba, buscamos el tiquet dinámicamente en este instante
         const modal = document.getElementById('modal-tiquet');
         const btnConfirmar = document.getElementById('btn-tiquet-confirmar');
         const btnCorregir = document.getElementById('btn-tiquet-corregir');
 
-        // Si falta algo en el HTML, abrimos WhatsApp de una vez
         if (!modal || !btnConfirmar || !btnCorregir) {
             console.warn("No se detectó el HTML del Tiquet. Enviando directamente.");
             window.enviarWhatsApp();
             return;
         }
 
-        // Llenar los datos del recibo
         spwaPintarTiquetModal();
 
-        // Asignar comportamiento a los botones del Tiquet
         btnCorregir.onclick = function() {
             modal.classList.add('is-hidden');
             abrirCarrito();
@@ -607,12 +639,11 @@ btnPagarWhatsApp.addEventListener('click', (e) => {
             window.enviarWhatsApp();
         };
 
-        // Mostrar Tiquet en pantalla
         cerrarCarrito();
         modal.classList.remove('is-hidden');
 
     } catch (error) {
         console.error("Fallo inesperado al mostrar tiquet:", error);
-        window.enviarWhatsApp(); // Respaldo máximo de seguridad
+        window.enviarWhatsApp();
     }
 });
